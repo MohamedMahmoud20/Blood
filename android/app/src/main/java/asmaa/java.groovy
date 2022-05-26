@@ -1,0 +1,5 @@
+package asmaa
+
+enum java {
+
+}
