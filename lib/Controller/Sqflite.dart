@@ -54,6 +54,54 @@ class SQFLITE{
     )
     ''');
     print("Created Table2 =====================================");
+    await db.execute('''
+    CREATE TABLE "Test" (
+    "id" INTEGER  NOT NULL PRIMARY KEY  AUTOINCREMENT,
+    "1" TEXT NOT NULL,
+    "2" TEXT,
+    "3" TEXT,
+    "4" TEXT,
+    "5" TEXT,
+    "6" TEXT,
+    "7" TEXT,
+    "8" TEXT
+    )
+    ''');
+    print("Created Table3 =====================================");
+
+    await db.execute('''
+    CREATE TABLE "User" (
+    "id" INTEGER  NOT NULL PRIMARY KEY  AUTOINCREMENT, 
+    "D%P" TEXT,
+    "age" TEXT,
+    "PType" TEXT
+    )
+    ''');
+    print("Created Table4 =====================================");
+
+    await db.execute('''
+    CREATE TABLE "UserData" (
+    "id" INTEGER  NOT NULL PRIMARY KEY  AUTOINCREMENT, 
+   "name" TEXT NOT NULL,
+    "phone" TEXT,
+    "email" TEXT
+    )
+    ''');
+
+    await db.execute('''
+    CREATE TABLE "Request" (
+    "id" INTEGER  NOT NULL PRIMARY KEY  AUTOINCREMENT, 
+     "name" TEXT NOT NULL,
+    "phone" TEXT,
+    "email" TEXT,
+    "Hospital" TEXT,
+    "age" TEXT,
+    "bt" TEXT,
+    "d-p" TEXT
+    )
+    ''');
+    print("Created Table6 =====================================");
+
   }
 
   Select (String sql) async{
@@ -89,5 +137,6 @@ class SQFLITE{
     String dbpath= await getDatabasesPath();
     String path= join(dbpath , "Todo.db");
     await deleteDatabase(path);
+    print("Delete All Done");
   }
 }

@@ -24,27 +24,36 @@ Register(name, Email, phone, password, link, context) async {
   );
 
   var resBodyData = jsonDecode(response.body)["data"];
+  var status = jsonDecode(response.body)["status"];
   var resBodyMessage = jsonDecode(response.body)["message"];
-  var TokenSignup = jsonDecode(response.body)["data"]["token"];
-  if (resBodyData != null) {
-    // AllData=[name  ,phone , Email , password , link];
-
-    SaveP(TokenSignup);
+  if(status ==false){
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: Duration(milliseconds: 1000),
-        content: Text("Register Successful")));
-    Navigator.pushReplacementNamed(context, HospitalScreen.route);
-    await SQL.Insert(
-        '''INSERT INTO Todo ('name' , 'phone' , 'address' , 'link')
+        duration: Duration(milliseconds: 2000),
+        content: Text("${resBodyMessage}")));
+    print("Message Error : ${resBodyMessage}");
+  }
+  else{
+    var TokenSignup = jsonDecode(response.body)["data"]["token"];
+    if (resBodyData != null) {
+      // AllData=[name  ,phone , Email , password , link];
+
+      SaveP(TokenSignup);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(milliseconds: 1000),
+          content: Text("Register Successful")));
+      Navigator.pushReplacementNamed(context, HospitalScreen.route);
+      await SQL.Insert(
+          '''INSERT INTO Todo ('name' , 'phone' , 'address' , 'link')
             VALUES("$name" , "$phone" , "" , "$link" )  ''');
 
-    // Navigator.of(context).pop();
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: Duration(milliseconds: 1000),
-        content: Text("${resBodyMessage}")));
-    print(resBodyData);
-    print(resBodyMessage);
+      // Navigator.of(context).pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(milliseconds: 1000),
+          content: Text("${resBodyMessage}")));
+      print(resBodyData);
+      print(resBodyMessage);
+    }
   }
   print("Token= = = ${pref.getString("token")}");
 }
@@ -59,24 +68,38 @@ Login(Email, password, context) async {
 
   var responseStatus = jsonDecode(response.body)["status"];
   var responseMessage = jsonDecode(response.body)["message"];
-  var TokenSignin = jsonDecode(response.body)["data"]['token'];
+  var name = jsonDecode(response.body)["data"]['name'];
 
-  if (responseStatus == true) {
-    SaveP(TokenSignin);
+  if(responseStatus==false){
+    var responseMessage = jsonDecode(response.body)["message"];
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: Duration(milliseconds: 1000),
+        duration: Duration(milliseconds: 2000),
         content: Text("${responseMessage}")));
-    print("Token=====$TokenSignin");
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
-      return HospitalScreen();
-    }));
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: Duration(milliseconds: 1000),
-        content: Text("${responseMessage}")));
-    print(responseStatus);
-    print(responseMessage);
+
+  }else {
+    var TokenSignin = jsonDecode(response.body)["data"]['token'];
+
+
+    if (responseStatus == true) {
+      SaveP(TokenSignin);
+      Saven(name);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(milliseconds: 1000),
+          content: Text("${responseMessage}")));
+      print("Token=====$TokenSignin");
+      print("Name=====$name");
+      print("NameRead=====$name");
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
+        return HospitalScreen();
+      }));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(milliseconds: 1000),
+          content: Text("${responseMessage}")));
+      print(responseStatus);
+      print(responseMessage);
+    }
   }
 }
 
@@ -128,6 +151,12 @@ SaveP(String token) async {
   pref.setString(key, token);
 
 }
+Saven(String token) async {
+  var pref = await SharedPreferences.getInstance();
+  var key = "name";
+  pref.setString(key, token);
+
+}
 
 ReadP(context) async {
   var pref = await SharedPreferences.getInstance();
@@ -142,4 +171,10 @@ ReadP(context) async {
     else {
     print("Failed");
   }
+}
+
+Future Readn() async {
+  var pref = await SharedPreferences.getInstance();
+  String? name = await pref.getString("name");
+  return name;
 }

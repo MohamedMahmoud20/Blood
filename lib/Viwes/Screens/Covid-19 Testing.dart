@@ -71,14 +71,6 @@ class _Covid19TestingState extends State<Covid19Testing> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Center(
-                      child: TextButton(
-                          onPressed: () {
-                            RowText.countt = 0;
-                            RowText.countf = 0;
-                          },
-                          child: Text("Refrsf")),
-                    ),
                     RowText(
                         Selectbox1: false,
                         Selectbox2: false,

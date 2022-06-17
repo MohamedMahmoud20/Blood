@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../Conests.dart';
+import 'Donor_Data_Screen.dart';
 
 class UserSignUpScreen extends StatefulWidget {
   static const String route = "UserSignUpScreen";
@@ -264,9 +265,15 @@ super.initState();
                                 ),
                                 InkWell(
                                   onTap: () async{
-                                    UserCredential google = await  signInWithGoogle();
-                                    print(google.user?.displayName);
-                                  },
+                                    await SQL.Insert(
+                                        '''INSERT INTO UserData ('name' , 'phone' , 'email')
+                                        VALUES("$name" , "$phone" , "$email" )  ''');
+                                  //   UserCredential google = await  signInWithGoogle();
+                                  //   print("Fire Basr = === ${google.user?.displayName}");
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
+                                      return DonorDataScreen();
+                                    }));
+                                    },
                                   child: CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       backgroundImage:

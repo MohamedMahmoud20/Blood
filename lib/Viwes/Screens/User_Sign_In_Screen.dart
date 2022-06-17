@@ -1,13 +1,10 @@
-import 'dart:developer';
 
 import 'package:bloodbankasmaa/Controller/ApiLogin.dart';
-import 'package:bloodbankasmaa/Controller/controllerlogin.dart';
 import 'package:bloodbankasmaa/Viwes/Widgets/Text_Filed.dart';
-import 'package:bloodbankasmaa/Viwes/Widgets/User_Buttomm.dart';
 import 'package:flutter/material.dart';
 
 import '../../Conests.dart';
-import 'D_Or_P_Screen_Tap.dart';
+import 'Donor_Data_Screen.dart';
 import 'Forget_Password.dart';
 
 class UserSignInScreen extends StatefulWidget {
@@ -249,7 +246,7 @@ class _UserSignInScreenState extends State<UserSignInScreen> {
                                                 content: Text(
                                                     " waite store data..")));
                                         Navigator.pushNamed(
-                                            context, DOrPScreentap.route);
+                                            context, DonorDataScreen.route);
 
                                         print("email:$email");
 

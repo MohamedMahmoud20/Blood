@@ -1,5 +1,5 @@
+import 'package:bloodbankasmaa/Conests.dart';
 import 'package:bloodbankasmaa/Controller/Sqflite.dart';
-import 'package:bloodbankasmaa/Viwes/Widgets/User_Buttomm.dart';
 
 import 'package:flutter/material.dart';
 import 'package:link_text/link_text.dart';
@@ -25,65 +25,115 @@ class _HospitalDetailsScreenState extends State<HospitalDetailsScreen> {
     return rsponse;
   }
 
+  List userData = [];
+
+  readddata() async {
+    var rsponse = await SQL.Select("SELECT * FROM 'UserData'");
+    if (mounted) {
+      setState(() {});
+    }
+    userData.addAll(rsponse);
+    return rsponse;
+  }
+
   @override
   void initState() {
     readdata();
+    readddata();
     super.initState();
   }
+
+  bool reQ = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(itemCount: fav.length,itemBuilder: (BuildContext context, int index) {
-        return  Padding(
-          padding: const EdgeInsets.only(left: 12.0, right: 12.0 ,bottom: 12.0),
-          child: Container(
-            height: 350,
-            width: 200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Containerb(
-                  asmaa: () {},
-                  partA1: "${fav[index]['name']}",
-                  partB1: "${fav[index]['phone']}",
-                  partC1: "${fav[index]['address']}",
-                  partD1: "${fav[index]['link']}",
-                  onpress:() async {
-                int res = await SQL.Delete(
-                "DELETE FROM 'Todo' WHERE id = ${fav[index]['id']}");
-                if (res > 0) {
-                fav.removeWhere(
-                (element) => element["id"] == fav[index]["id"]);
-                setState(() {});
-                }
-                },
-                ),
-              ],
-            ),
-          ),
-        );
-      },),
+      body: ListView.builder(
+        itemCount: fav.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+              padding:
+                  const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0),
+              child: BodyListOfHospital(
+                index: index,
+                name: "${fav[index]['name']}",
+                link: "${fav[index]['link']}",
+                asmaa: "${fav[index]['name']}",
+                address: "${fav[index]['address']}",
+                onpress: () {},
+                phone: "${fav[index]['phone']}",
+              ));
+        },
+      ),
     );
   }
 }
 
-class Containerb extends StatelessWidget {
-  final partA1;
-  final partB1;
-  final partC1;
-  final partD1;
+class BodyListOfHospital extends StatefulWidget {
+  final name;
+  final phone;
+  final address;
+  final link;
   final asmaa;
   final onpress;
+  int index;
 
-  Containerb(
-      {required this.partA1,
-      required this.partB1,
-      required this.partC1,
-      required this.partD1,
-      required this.asmaa,
-      required this.onpress,});
+  BodyListOfHospital({
+    required this.index,
+    required this.name,
+    required this.phone,
+    required this.address,
+    required this.link,
+    required this.asmaa,
+    required this.onpress,
+  });
+
+  @override
+  State<BodyListOfHospital> createState() => _BodyListOfHospitalState();
+}
+
+class _BodyListOfHospitalState extends State<BodyListOfHospital> {
+  SQFLITE SQL = SQFLITE();
+  List fav = [];
+  late List Userdata = [];
+  late List data = [];
+
+  readData() async {
+    var rsponse = await SQL.Select("SELECT * FROM 'UserData'");
+    if (mounted) {
+      setState(() {});
+    }
+    Userdata.addAll(rsponse);
+    return rsponse;
+  }
+
+  readDData() async {
+    var rsponse = await SQL.Select("SELECT * FROM 'User'");
+    if (mounted) {
+      setState(() {});
+    }
+    data.addAll(rsponse);
+    return rsponse;
+  }
+
+  readdata() async {
+    var rsponse = await SQL.Select("SELECT * FROM 'Todo'");
+    if (mounted) {
+      setState(() {});
+    }
+    fav.addAll(rsponse);
+    return rsponse;
+  }
+
+  @override
+  void initState() {
+    readdata();
+    readData();
+    readDData();
+    super.initState();
+  }
+
+  bool reQ = false;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +155,7 @@ class Containerb extends StatelessWidget {
                   ),
                   //SizedBox(width: 10,)
                   Text(
-                    partA1,
+                    widget.name,
                     style: TextStyle(
                         fontSize: 25,
                         color: Colors.red[700],
@@ -119,7 +169,7 @@ class Containerb extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "Phone: ",
+                    "phone: ",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 25,
@@ -127,7 +177,7 @@ class Containerb extends StatelessWidget {
                   ),
                   //SizedBox(width: 10,)
                   Text(
-                    partB1,
+                    widget.phone,
                     style: TextStyle(
                         fontSize: 25,
                         color: Colors.red[700],
@@ -149,7 +199,7 @@ class Containerb extends StatelessWidget {
                   ),
                   //SizedBox(width: 10,)
                   Text(
-                    partC1,
+                    widget.address,
                     style: TextStyle(
                         fontSize: 25,
                         color: Colors.red[700],
@@ -177,29 +227,50 @@ class Containerb extends StatelessWidget {
                       height: 40,
                       width: 200,
                       child: LinkText(
-                        partD1,
+                        widget.link,
                       ),
                     ),
                   )
                 ],
               ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              IconButton(onPressed: onpress,icon: Icon(Icons.delete)),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: UserButtom(
-                    asmaa: asmaa,
-                    namebutton: Text(
-                      "Request",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    colorbutton: Colors.red[700]),
-              ),
-            ],)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(onPressed: widget.onpress, icon: Icon(Icons.delete)),
+                (reQ == false)
+                    ? Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: MaterialButton(
+                          color: Palette.googleColor,
+                          onPressed: () async {
+                            setState(() {
+                              reQ = true;
+                            });
+                            await SQL.Insert(
+                                '''INSERT INTO Request ('name' , 'phone' , 'email' , 'age' , 'bt', 'd-p' , 'Hospital')
+                                        VALUES("${Userdata.last['name']}" , "${Userdata.last['phone']}" , "${Userdata.last['email']}" ,"${data.last['age']}" , "${data.last['PType']}" ,"${data.last['D%P']}" , "${fav[widget.index]['name']}" )  ''');
+
+                            print(
+                                "Hospital Name = = = ${fav[widget.index]['name']}");
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Text("Request",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                        ))
+                    : Text(
+                        "Done",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green),
+                      )
+              ],
+            )
           ],
         ),
         height: 350,

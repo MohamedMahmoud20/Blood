@@ -73,8 +73,7 @@ class _PatientDataScreenState extends State<PatientDataScreen> {
                             ),
                             //SizedBox(width: 10,)
                             Text(""
-
-                             , style: TextStyle(
+                              , style: TextStyle(
                                   fontSize: 22,
                                   color: Colors.red[700],
                                   fontWeight: FontWeight.bold),

@@ -97,7 +97,6 @@ class _BloodBankState extends State<BloodBank> with TickerProviderStateMixin {
      "UserSignInScreen": (context) => UserSignInScreen(),
         "ForgetPassword": (context) => ForgetPassword(),
         "UserSignUpScreen": (context) => UserSignUpScreen(),
-        "DOrPScreentap": (context) => DOrPScreentap(),
        // "DOrPScreen": (context) => DOrPScreen(),
        "HealthyNews": (context) => HealthyNews(),
         "Covid19Testing": (context) => Covid19Testing(),

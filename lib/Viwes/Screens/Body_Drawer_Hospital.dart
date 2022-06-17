@@ -3,6 +3,7 @@ import 'package:bloodbankasmaa/Viwes/Widgets/My_Buttom.dart';
 import 'package:flutter/material.dart';
 
 import 'Profile.dart';
+import 'Request.dart';
 class BodyDrawerHospital extends StatefulWidget {
   const BodyDrawerHospital({Key? key}) : super(key: key);
 
@@ -23,7 +24,11 @@ class _BodyDrawerHospitalState extends State<BodyDrawerHospital> {
               height: 40,
             ),
             InkWell(
-              onTap: () { },
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
+                  return RequestBloodScreen();
+                }));
+              },
               child: Row(
                 children: [
                   Icon(
